@@ -3,15 +3,6 @@ from py2neo.data import Node, Relationship
 
 from doccano_preprocess import *
 
-# spo_list = [{"predicate": "作者", "object_type": "人物", "subject_type": "图书作品", "object": "余国藩",
-#              "subject": "红楼梦、西游记与其他"},
-#             {"predicate": "出版社", "object_type": "出版社", "subject_type": "图书作品",
-#              "object": "生活·读书·新知三联书店", "subject": "红楼梦、西游记与其他"},
-#             {"predicate": "所属专辑", "object_type": "音乐专辑", "subject_type": "歌曲", "object": "三世森情",
-#              "subject": "烈女子"},
-#             {"predicate": "歌手", "object_type": "人物", "subject_type": "歌曲", "object": "丁克森",
-#              "subject": "烈女子"}]
-
 if __name__ == '__main__':
     spo_path = 'output.json'
     gen_spo_list(spo_path)

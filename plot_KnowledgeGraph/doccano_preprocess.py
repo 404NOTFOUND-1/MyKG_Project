@@ -1,4 +1,5 @@
 import json
+
 from tqdm import tqdm
 
 
@@ -29,10 +30,8 @@ def get_relation(Parts, Relations):
     :return:
     """
     spo_list = []
-    # print(Parts)
     for i, Relation in enumerate(Relations):
         spo = {"predicate": {}, "object_type": {}, "subject_type": {}, "object": {}, "subject": {}}
-        # print(i, Relation)
         spo['predicate'] = Relation['type']
         from_id = Relation['from_id']
         to_id = Relation['to_id']
@@ -57,7 +56,7 @@ def gen_spo_list(output='output.json'):
     text_spo = {"text": {}, "spo_list": {}}
     with open('all.jsonl', 'r', encoding='utf8') as f:
         with open(output, 'w') as fw:
-            for line in tqdm(f,'doccano to json'):
+            for line in tqdm(f, 'doccano to json'):
                 data = json.loads(line)
                 if data['relations']:
                     text, parts = get_entity(data)
@@ -67,4 +66,3 @@ def gen_spo_list(output='output.json'):
                     # print(text_spo)
                     fw.write(json.dumps(text_spo, ensure_ascii=False))
                     fw.write('\n')
-                    # print()
