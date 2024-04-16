@@ -4,8 +4,9 @@ from py2neo.data import Node, Relationship
 from doccano_preprocess import *
 
 if __name__ == '__main__':
+    input_path = 'all.jsonl'
     spo_path = 'output.json'
-    gen_spo_list(spo_path)
+    gen_spo_list(input_path, spo_path, True)
 
     spo_list = []
     with open(spo_path, 'r') as f:
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     my_graph.create(Node(spo_list[0]['object_type'], name=spo_list[0]['object']))
     matcher = NodeMatcher(my_graph)
     # test2
-    for i, spo in tqdm(enumerate(spo_list), '构建图谱中'):
+    for i, spo in enumerate(tqdm(spo_list, '构建图谱中')):
         predicate = spo['predicate']
         object_type = spo['object_type']
         subject_type = spo['subject_type']

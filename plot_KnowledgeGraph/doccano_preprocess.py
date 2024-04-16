@@ -47,22 +47,35 @@ def get_relation(Parts, Relations):
     return spo_list
 
 
-def gen_spo_list(output='output.json'):
+def gen_spo_list(Input='all.jsonl', output='output.json', is_jsonl=True):
     """
     输出最终的三元组列表
-    :param output: 输出名称
+    :param is_jsonl: 判断是否为jsonl文件或json文件
+    :param Input: 输入文件
+    :param output: 输出文件
     :return:
     """
     text_spo = {"text": {}, "spo_list": {}}
-    with open('all.jsonl', 'r', encoding='utf8') as f:
-        with open(output, 'w') as fw:
-            for line in tqdm(f, 'doccano to json'):
-                data = json.loads(line)
-                if data['relations']:
-                    text, parts = get_entity(data)
-                    spo_lists = get_relation(parts, data['relations'])
-                    text_spo['text'] = text
-                    text_spo['spo_list'] = spo_lists
-                    # print(text_spo)
-                    fw.write(json.dumps(text_spo, ensure_ascii=False))
-                    fw.write('\n')
+    sum_line = 0
+    if is_jsonl:
+        for _ in open(Input, 'r', encoding='utf8'):
+            sum_line += 1
+        with open(Input, 'r', encoding='utf8') as f:
+            with open(output, 'w') as fw:
+                pbar = tqdm(total=sum_line, desc='doccano to json')
+                for line in f:
+                    data = json.loads(line)
+                    if data['relations']:
+                        text, parts = get_entity(data)
+                        spo_lists = get_relation(parts, data['relations'])
+                        text_spo['text'] = text
+                        text_spo['spo_list'] = spo_lists
+                        # print(text_spo)
+                        fw.write(json.dumps(text_spo, ensure_ascii=False))
+                        fw.write('\n')
+                        pbar.update(1)
+    else:
+        with open(Input, 'r') as f:
+            with open(output, 'w') as fw:
+                for line in f:
+                    fw.write(line)

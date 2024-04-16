@@ -17,12 +17,12 @@ def output_json(file, data):
             f.write(json.dumps(d, ensure_ascii=False) + '\n')
 
 
-def train_test_output(data, type='train'):
-    if type == 'train':
+def train_test_output(data, Type='train'):
+    if Type == 'train':
         output_json('cluener/train.json', data)
-    elif type == 'dev':
+    elif Type == 'dev':
         output_json('cluener/dev.json', data)
-    elif type == 'test':
+    elif Type == 'test':
         output_json('cluener/rawtest.json', data)
         with open('cluener/rawtest.json', 'r', encoding="utf8") as f:
             with open('cluener/test.json', 'w', encoding="utf8") as fw:
@@ -182,8 +182,6 @@ def video2text(src, width, show=False):
 def generate_ner_datasets(src):
     """
     从获取的原始文本中直接得到用于命名实体识别的数据集
-    :param if_video:
-    :param width:
     :param src:
     :return:
     """
