@@ -4,8 +4,8 @@ from py2neo.data import Node, Relationship
 from doccano_preprocess import *
 
 if __name__ == '__main__':
-    input_path = 'all.jsonl'
-    spo_path = 'output.json'
+    input_path = 'datasets/all.jsonl'
+    spo_path = 'datasets/output.json'
     gen_spo_list(input_path, spo_path, True)
 
     spo_list = []
