@@ -1,3 +1,5 @@
+import json
+import os
 import pickle
 
 
@@ -13,6 +15,41 @@ def save_model(model, file_name):
     """用于保存模型"""
     with open(file_name, "wb") as f:
         pickle.dump(model, f)
+
+
+def submit_prediction():
+    """
+    提交检测的实体
+    :return:
+    """
+    output_submit_file = os.path.join('results/', 'test_submit.json')
+    test_text = []
+    with open(os.path.join('ResumeNER/cluener', "test.json"), 'r', encoding='utf8') as fr:
+        for line in fr:
+            test_text.append(json.loads(line))
+    test_submit = []
+    for x, y in zip(test_text, results):
+        json_d = {}
+        json_d['id'] = x['id']
+        json_d['label'] = {}
+        entities = y['entities']
+        words = list(x['text'])
+        if len(entities) != 0:
+            for subject in entities:
+                tag = subject[0]
+                start = subject[1]
+                end = subject[2]
+                word = "".join(words[start:end + 1])
+                if tag in json_d['label']:
+                    if word in json_d['label'][tag]:
+                        json_d['label'][tag][word].append([start, end])
+                    else:
+                        json_d['label'][tag][word] = [[start, end]]
+                else:
+                    json_d['label'][tag] = {}
+                    json_d['label'][tag][word] = [[start, end]]
+        test_submit.append(json_d)
+    json_to_text(output_submit_file, test_submit)
 
 
 def load_model(file_name):
