@@ -1,7 +1,7 @@
-from utils import load_model, extend_maps, prepocess_data_for_lstmcrf
 from data import build_corpus
-from evaluating import Metrics
 from evaluate import ensemble_evaluate
+from evaluating import Metrics
+from utils import load_model, extend_maps, prepocess_data_for_lstmcrf
 
 HMM_MODEL_PATH = './ckpts/hmm.pkl'
 CRF_MODEL_PATH = './ckpts/crf.pkl'

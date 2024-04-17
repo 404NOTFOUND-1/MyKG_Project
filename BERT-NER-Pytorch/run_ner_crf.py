@@ -130,10 +130,7 @@ def train(args, train_dataset, model, tokenizer):
             pbar(step, {'loss': loss.item()})
             tr_loss += loss.item()
             if (step + 1) % args.gradient_accumulation_steps == 0:
-                if args.fp16:
-                    torch.nn.utils.clip_grad_norm_(amp.master_params(optimizer), args.max_grad_norm)
-                else:
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
                 scheduler.step()  # Update learning rate schedule
                 optimizer.step()
                 model.zero_grad()
@@ -263,7 +260,7 @@ def predict(args, model, tokenizer, prefix=""):
 
     if isinstance(model, nn.DataParallel):
         model = model.module
-    #get true labels
+    # get true labels
     rawtext_path = os.path.join(args.data_dir, "rawtest.json")
     true_label = data_process(rawtext_path)
     y_true = []
@@ -296,6 +293,8 @@ def predict(args, model, tokenizer, prefix=""):
     logger.info("\n")
     # plot confusion matrix
     plot_my_confusionMatrix(y_true, y_pred, classes, 'bert_crf_confusionMatrix.png')
+    # plot report
+    plot_classification_report(y_true, y_pred, classes, '{}-crf'.format(args.model_type))
     with open(output_predict_file, "w") as writer:
         for record in results:
             writer.write(json.dumps(record) + '\n')

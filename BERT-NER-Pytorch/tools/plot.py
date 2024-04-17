@@ -4,6 +4,7 @@ import os
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 
 mpl.rcParams["font.sans-serif"] = ["SimHei"]
@@ -83,6 +84,10 @@ def plot_my_confusionMatrix(y_true, y_pred, classes, name='myConfusionMatrix.png
     print('保存混淆矩阵图像完成')
     # 在保存图像后清除当前图形，以避免在下一个图像中重复内容
     plt.clf()
+
+
+def plot_classification_report(y_true, y_pred, classes, model_name):
+    print("==={}分类器报告===\n".format(model_name), classification_report(y_true, y_pred, target_names=classes))
 
 
 if __name__ == "__main__":

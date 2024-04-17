@@ -17,8 +17,9 @@ class BILSTM_Model(object):
             vocab_size:词典大小
             out_size:标注种类
             crf选择是否添加CRF层"""
-        self.device = torch.device(
-            "cuda" if torch.cuda.is_available() else "cpu")
+        # self.device = torch.device(
+        #     "cuda" if torch.cuda.is_available() else "cpu")
+        self.device = 'cpu'
 
         # 加载模型参数
         self.emb_size = LSTMConfig.emb_size

@@ -2,8 +2,8 @@
 class TrainingConfig(object):
     batch_size = 64
     # 学习速率
-    lr = 0.001
-    epoches = 30
+    lr = 5e-3
+    epoches = 60
     print_step = 5
 
 

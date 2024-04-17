@@ -2,7 +2,7 @@ import json
 import random
 
 raw_file = 'doccano/新闻/all.jsonl'
-conv_file = 'doccano/doccano_conv.json'
+
 
 
 def output_json(file, data):
@@ -58,7 +58,7 @@ def jsonl2json(input_json):
     return output_json
 
 
-def doccano2json(path):
+def doccano2json(path, conv_file):
     """
     从doccano输出转换为cluener数据集格式的json文件
     :param path: jsonl文件路径
@@ -113,15 +113,16 @@ def train_dev_test_split(path, train_size, dev_size):
     train_test_output(test_data, 'test')
 
 
-def generate_train_dev_test_datasets(raw_jsonl, train_size=0.8, dev_size=0.1):
+def generate_train_dev_test_datasets(raw_jsonl, conv_file, train_size=0.8, dev_size=0.1):
     """
     直接调用，将原始jsonl文件转换为训练集、验证集和测试集
+    :param conv_file:
     :param raw_jsonl: 原始jsonl
     :param train_size: 训练集占数据集的比例
     :param dev_size: 验证集占数据集的比例
     :return:
     """
-    doccano2json(raw_jsonl)
+    doccano2json(raw_jsonl, conv_file)
     train_dev_test_split(conv_file, train_size, dev_size)
 
 
