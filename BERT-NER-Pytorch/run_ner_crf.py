@@ -292,9 +292,9 @@ def predict(args, model, tokenizer, prefix=""):
         pbar(step)
     logger.info("\n")
     # plot confusion matrix
-    plot_my_confusionMatrix(y_true, y_pred, classes, 'bert_crf_confusionMatrix.png')
+    plot_my_confusionMatrix(y_true, y_pred, classes, 'Bert_CRF Confusion Matrix', 'bert_crf_confusionMatrix.png')
     # plot report
-    plot_classification_report(y_true, y_pred, classes, '{}-crf'.format(args.model_type))
+    plot_classification_report(y_true, y_pred, '{}-crf'.format(args.model_type))
     with open(output_predict_file, "w") as writer:
         for record in results:
             writer.write(json.dumps(record) + '\n')

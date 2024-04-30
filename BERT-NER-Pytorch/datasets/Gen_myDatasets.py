@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # 分割标注好的数据集为训练集、验证集、测试集
     if arg.do_split:
         print('划分文件目录：{}'.format(arg.split_raw_jsonl))
-        generate_train_dev_test_datasets(arg.split_raw_jsonl, conv_file, train_size=0.5, dev_size=0.4)
+        generate_train_dev_test_datasets(arg.split_raw_jsonl, conv_file, train_size=0.45, dev_size=0.4)
     if arg.do_gen_ner:
         print('生成实体检测数据集')
         generate_ner_datasets(arg.temp)

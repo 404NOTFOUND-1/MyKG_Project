@@ -64,30 +64,32 @@ def data_process(path):
     return data
 
 
-def plot_my_confusionMatrix(y_true, y_pred, classes, name='myConfusionMatrix.png'):
+def plot_my_confusionMatrix(y_true, y_pred, classes, title, name='myConfusionMatrix.png'):
     cm = confusion_matrix(y_true, y_pred, labels=classes)
-    plt.figure(figsize=(10, 8), dpi=300)
+    plt.figure(figsize=(10, 10), dpi=400)
+    # 更改字体大小
+    sns.set(font_scale=1.1)
     # 使用xticklabels和yticklabels添加刻度标签
     sns.heatmap(cm, annot=True, cbar=False, cmap=plt.get_cmap('Blues'), xticklabels=classes, yticklabels=classes)
     # 设置刻度标签的显示位置和标签文本
     plt.xticks(rotation=45, ha="right")  # 绕x轴旋转45度，向右对齐，有助于标签阅读
     plt.yticks(rotation=45)  # 绕y轴旋转45度
     # 添加标签和标题
-    plt.xlabel('预测标签')  # X轴标签
-    plt.ylabel('真实标签')  # Y轴标签
-    plt.title('NER混淆矩阵')  # 标题，每个图像有不同的编号
+    plt.xlabel('predict label')  # X轴标签
+    plt.ylabel('true label')  # Y轴标签
+    plt.title(title)  # 标题，每个图像有不同的编号
     # 如果需要保存图像，取消下一行的注释
     save_path = './plots/'
     if not os.path.exists(save_path):
         os.mkdir(save_path)
     plt.savefig(save_path + name)
-    print('保存混淆矩阵图像完成')
+    print('保存混淆矩阵图像完成\n')
     # 在保存图像后清除当前图形，以避免在下一个图像中重复内容
     plt.clf()
 
 
-def plot_classification_report(y_true, y_pred, classes, model_name):
-    print("==={}分类器报告===\n".format(model_name), classification_report(y_true, y_pred, target_names=classes))
+def plot_classification_report(y_true, y_pred, model_name):
+    print("==={}分类器报告===\n".format(model_name), classification_report(y_true, y_pred))
 
 
 if __name__ == "__main__":

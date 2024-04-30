@@ -1,15 +1,18 @@
-import os
-import random
-import torch
-import numpy as np
 import json
+import logging
+import os
 import pickle
-import torch.nn as nn
+import random
 from collections import OrderedDict
 from pathlib import Path
-import logging
+
+import numpy as np
+import torch
+import torch.nn as nn
 
 logger = logging.getLogger()
+
+
 def print_config(config):
     info = "Running with the following configs:\n"
     for k, v in config.items():
@@ -17,13 +20,14 @@ def print_config(config):
     print("\n" + info + "\n")
     return
 
+
 def init_logger(log_file=None, log_file_level=logging.NOTSET):
     '''
     Example:
         >>> init_logger(log_file)
         >>> logger.info("abc'")
     '''
-    if isinstance(log_file,Path):
+    if isinstance(log_file, Path):
         log_file = str(log_file)
     log_format = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                                    datefmt='%m/%d/%Y %H:%M:%S')
@@ -39,6 +43,7 @@ def init_logger(log_file=None, log_file_level=logging.NOTSET):
         # file_handler.setFormatter(log_format)
         logger.addHandler(file_handler)
     return logger
+
 
 def seed_everything(seed=1029):
     '''
@@ -120,7 +125,7 @@ def restore_checkpoint(resume_path, model=None):
         model.module.load_state_dict(states)
     else:
         model.load_state_dict(states)
-    return [model,best,start_epoch]
+    return [model, best, start_epoch]
 
 
 def save_pickle(data, file_path):
@@ -164,6 +169,7 @@ def save_json(data, file_path):
     with open(str(file_path), 'w') as f:
         json.dump(data, f)
 
+
 def save_numpy(data, file_path):
     '''
     保存成.npy文件
@@ -173,7 +179,8 @@ def save_numpy(data, file_path):
     '''
     if not isinstance(file_path, Path):
         file_path = Path(file_path)
-    np.save(str(file_path),data)
+    np.save(str(file_path), data)
+
 
 def load_numpy(file_path):
     '''
@@ -184,6 +191,7 @@ def load_numpy(file_path):
     if not isinstance(file_path, Path):
         file_path = Path(file_path)
     np.load(str(file_path))
+
 
 def load_json(file_path):
     '''
@@ -198,7 +206,8 @@ def load_json(file_path):
         data = json.load(f)
     return data
 
-def json_to_text(file_path,data):
+
+def json_to_text(file_path, data):
     '''
     将json list写入text文件中
     :param file_path:
@@ -207,10 +216,11 @@ def json_to_text(file_path,data):
     '''
     if not isinstance(file_path, Path):
         file_path = Path(file_path)
-    with open(str(file_path), 'w',encoding='utf8') as fw:
+    with open(str(file_path), 'w', encoding='utf8') as fw:
         for line in data:
             line = json.dumps(line, ensure_ascii=False)
             fw.write(line + '\n')
+
 
 def save_model(model, model_path):
     """ 存储不含有显卡信息的state_dict或model
@@ -227,6 +237,7 @@ def save_model(model, model_path):
     for key in state_dict:
         state_dict[key] = state_dict[key].cpu()
     torch.save(state_dict, model_path)
+
 
 def load_model(model, model_path):
     '''

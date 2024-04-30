@@ -25,7 +25,7 @@ class Metrics(object):
 
     def report_scores(self, model_name):
         print("==={}分类器报告===\n".format(model_name),
-              classification_report(self.golden_tags, self.predict_tags, target_names=self.classes))
+              classification_report(self.golden_tags, self.predict_tags))
 
     def _remove_Otags(self):
         length = len(self.golden_tags)

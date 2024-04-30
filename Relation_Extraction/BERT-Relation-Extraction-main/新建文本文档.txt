@@ -1,0 +1,17 @@
+  File "D:\ProgramFiles\Python files\KnowledgeGraph\MyKG_Project\Relation_Extraction\BERT-Relation-Extraction-main\re_main.py", line 192, in <module>
+    main(data_name)
+  File "D:\ProgramFiles\Python files\KnowledgeGraph\MyKG_Project\Relation_Extraction\BERT-Relation-Extraction-main\re_main.py", line 186, in main
+    report = train.test()
+  File "D:\ProgramFiles\Python files\KnowledgeGraph\MyKG_Project\Relation_Extraction\BERT-Relation-Extraction-main\re_main.py", line 83, in test
+    output = self.model(input_ids, attention_mask, token_type_ids, labels)
+  File "D:\Anaconda\lib\site-packages\torch\nn\modules\module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\ProgramFiles\Python files\KnowledgeGraph\MyKG_Project\Relation_Extraction\BERT-Relation-Extraction-main\model.py", line 58, in forward
+    bert_output = self.bert(input_ids=input_ids)
+  File "D:\Anaconda\lib\site-packages\torch\nn\modules\module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "D:\Anaconda\lib\site-packages\transformers\models\bert\modeling_bert.py", line 960, in forward
+    self.warn_if_padding_and_no_attention_mask(input_ids, attention_mask)
+  File "D:\Anaconda\lib\site-packages\transformers\modeling_utils.py", line 4516, in warn_if_padding_and_no_attention_mask
+    if self.config.pad_token_id in input_ids[:, [-1, 0]]:
+IndexError: too many indices for tensor of dimension 1

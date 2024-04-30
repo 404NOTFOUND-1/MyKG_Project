@@ -16,8 +16,7 @@ class BiLSTM(nn.Module):
         self.bilstm = nn.LSTM(emb_size, hidden_size,
                               batch_first=True,
                               bidirectional=True)
-
-        self.lin = nn.Linear(2*hidden_size, out_size)
+        self.lin = nn.Linear(2 * hidden_size, out_size)
 
     def forward(self, sents_tensor, lengths):
         emb = self.embedding(sents_tensor)  # [B, L, emb_size]

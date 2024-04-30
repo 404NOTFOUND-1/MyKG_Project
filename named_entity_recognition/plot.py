@@ -66,15 +66,17 @@ def data_process(path):
 
 def plot_my_confusionMatrix(y_true, y_pred, classes, title='NER混淆矩阵', name='myConfusionMatrix.png'):
     cm = confusion_matrix(y_true, y_pred, labels=classes)
-    plt.figure(figsize=(15, 15), dpi=300)
+    plt.figure(figsize=(10, 10), dpi=400)
+    # 更改字体大小
+    sns.set(font_scale=1.1)
     # 使用xticklabels和yticklabels添加刻度标签
     sns.heatmap(cm, annot=True, cbar=False, cmap=plt.get_cmap('Blues'), xticklabels=classes, yticklabels=classes)
     # 设置刻度标签的显示位置和标签文本
     plt.xticks(rotation=45, ha="right")  # 绕x轴旋转45度，向右对齐，有助于标签阅读
     plt.yticks(rotation=45)  # 绕y轴旋转45度
     # 添加标签和标题
-    plt.xlabel('预测标签')  # X轴标签
-    plt.ylabel('真实标签')  # Y轴标签
+    plt.xlabel('predict label')  # X轴标签
+    plt.ylabel('true label')  # Y轴标签
     plt.title(title)  # 标题，每个图像有不同的编号
     # 如果需要保存图像，取消下一行的注释
     save_path = './plots/'

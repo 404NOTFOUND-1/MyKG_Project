@@ -28,7 +28,7 @@ def hmm_train_eval(train_data, test_data, word2id, tag2id, remove_O=False):
 
     metrics = Metrics(test_tag_lists, pred_tag_lists, remove_O=remove_O)
     metrics.report_scores('HMM')
-    metrics.report_confusion_matrix('HMM混淆矩阵', 'HMM_confusion_matrix.png')
+    metrics.report_confusion_matrix('HMM Confusion Matrix', 'HMM_confusion_matrix.png')
 
     return pred_tag_lists
 
@@ -46,7 +46,7 @@ def crf_train_eval(train_data, test_data, remove_O=False):
 
     metrics = Metrics(test_tag_lists, pred_tag_lists, remove_O=remove_O)
     metrics.report_scores('CRF')
-    metrics.report_confusion_matrix('CRF混淆矩阵', 'CRF_confusion_matrix.png')
+    metrics.report_confusion_matrix('CRF Confusion Matrix', 'CRF_confusion_matrix.png')
 
     return pred_tag_lists
 
@@ -75,10 +75,10 @@ def bilstm_train_and_eval(train_data, dev_data, test_data,
     metrics = Metrics(test_tag_lists, pred_tag_lists, remove_O=remove_O)
     if model_name == "bilstm":
         metrics.report_scores('BiLSTM')
-        metrics.report_confusion_matrix('BILSTM混淆矩阵', 'BILSTM_confusion_matrix.png')
+        metrics.report_confusion_matrix('BILSTM Confusion Matrix', 'BILSTM_confusion_matrix.png')
     else:
         metrics.report_scores('BiLSTM+CRF')
-        metrics.report_confusion_matrix('BILSTM_CRF混淆矩阵', 'BILSTM_CRF_confusion_matrix.png')
+        metrics.report_confusion_matrix('BILSTM_CRF Confusion Matrix', 'BILSTM_CRF_confusion_matrix.png')
 
     return pred_tag_lists
 
@@ -99,4 +99,4 @@ def ensemble_evaluate(results, targets, remove_O=False):
     print("Ensemble 四个模型的结果如下：")
     metrics = Metrics(targets, pred_tags, remove_O=remove_O)
     metrics.report_scores('ensemble')
-    metrics.report_confusion_matrix('ensemble混淆矩阵', 'ensemble_confusion_matrix.png')
+    metrics.report_confusion_matrix('ensemble Confusion Matrix', 'ensemble_confusion_matrix.png')
