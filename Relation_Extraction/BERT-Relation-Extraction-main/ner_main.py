@@ -57,7 +57,7 @@ class Trainer:
                     loss.backward()
                     self.optimizer.step()
                     self.schedule.step()
-                    print(f"【train】{epoch}/{self.epochs} {global_step}/{self.total_step} loss:{loss.item()}")
+                    # print(f"【train】{epoch}/{self.epochs} {global_step}/{self.total_step} loss:{loss.item()}")
                     global_step += 1
                     t.set_postfix(loss=loss.item())
                     t.update(1)

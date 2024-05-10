@@ -4,10 +4,11 @@ import os
 import numpy as np
 import torch
 from sklearn.metrics import classification_report
+from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import get_linear_schedule_with_warmup, BertTokenizer
-from torch.optim import AdamW
+
 from config import ReConfig
 from data_loader import ReDataset, ReCollate
 from model import BertRe
