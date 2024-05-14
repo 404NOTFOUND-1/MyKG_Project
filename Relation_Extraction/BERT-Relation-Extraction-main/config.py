@@ -6,7 +6,7 @@ from transformers import BertTokenizer
 
 
 class CommonConfig:
-    bert_dir = "./model_hub/chinese-bert-wwm-ext/"
+    bert_dir = "./model_hub/bert-base-chinese/"
     output_dir = "./checkpoint/"
     data_dir = "./data/"
 
@@ -66,11 +66,11 @@ class ReConfig:
         self.id2label = {i: label for i, label in enumerate(self.labels)}
 
         self.max_seq_len = 256
-        self.epochs = 15
-        self.train_batch_size = 12
-        self.dev_batch_size = 12
+        self.epochs = 20
+        self.train_batch_size = 32
+        self.dev_batch_size = 24
         self.learning_rate = 3e-5
         self.adam_epsilon = 1e-8
         self.weight_decay = 0.01
         self.warmup_proportion = 0.01
-        self.save_step = 500
+        self.save_step = 20

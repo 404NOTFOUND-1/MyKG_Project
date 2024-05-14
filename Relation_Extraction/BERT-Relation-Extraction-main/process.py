@@ -46,28 +46,43 @@ class Doccano_preprocess:
             :return:
             """
             spo_list = []
-            for i, Relation in enumerate(Relations):
+            if Relations:
+                for i, Relation in enumerate(Relations):
+                    spo = {"h": {"name": {}, "type": {}, "pos": {}}, "t": {"name": {}, "type": {}, "pos": {}},
+                           'relation': Relation['type']}
+                    from_id = Relation['from_id']
+                    to_id = Relation['to_id']
+                    for part in Parts:
+                        if part['id'] == from_id:
+                            # spo['subject_type'] = part['type']
+                            spo['h']['name'] = part['name']
+                            spo['h']['type'] = part['type']
+                            spo['h']['pos'] = part['pos']
+                        if part['id'] == to_id:
+                            # spo['object_type'] = part['type']
+                            spo['t']['name'] = part['name']
+                            spo['t']['type'] = part['type']
+                            spo['t']['pos'] = part['pos']
+                    print(spo)
+                    spo_list.append(spo)
+            else:
                 spo = {"h": {"name": {}, "type": {}, "pos": {}}, "t": {"name": {}, "type": {}, "pos": {}},
-                       'relation': {}}
-                if Relation['type']:
-                    spo['relation'] = Relation['type']
-                else:
-                    spo['relation'] = '没关系'
-                from_id = Relation['from_id']
-                to_id = Relation['to_id']
-                for part in Parts:
-                    if part['id'] == from_id:
-                        # spo['subject_type'] = part['type']
-                        spo['h']['name'] = part['name']
-                        spo['h']['type'] = part['type']
-                        spo['h']['pos'] = part['pos']
-                    if part['id'] == to_id:
-                        # spo['object_type'] = part['type']
-                        spo['t']['name'] = part['name']
-                        spo['t']['type'] = part['type']
-                        spo['t']['pos'] = part['pos']
-                print(spo)
-                spo_list.append(spo)
+                       'relation': '没关系'}
+                part_num = len(Parts)
+                for i in range(part_num):
+                    for j in range(i + 1, part_num):
+                        spo['h']['name'] = Parts[i]['name']
+                        spo['h']['type'] = Parts[i]['type']
+                        spo['h']['pos'] = Parts[i]['pos']
+                        spo['t']['name'] = Parts[j]['name']
+                        spo['t']['type'] = Parts[j]['type']
+                        spo['t']['pos'] = Parts[j]['pos']
+                        spo_list.append(spo)
+                        if j > 0:
+                            break
+                    if i > 0:
+                        break
+
             return spo_list
 
         text_spo = {"text": {}, "spo_list": {}}
@@ -196,7 +211,7 @@ class ProcessDgreData:
                     if neg_cur == neg_total:
                         break
 
-        train_ratio = 0.7
+        train_ratio = 0.6
         train_num = int(len(res) * train_ratio)
         train_data = res[:train_num]
         dev_data = res[train_num:]
@@ -208,7 +223,7 @@ class ProcessDgreData:
             fp.write("\n".join([json.dumps(d, ensure_ascii=False) for d in dev_data]))
 
         # 这里标签一般从数据中处理得到，这里我们自定义
-        labels = list(re_labels) + ["没关系"]
+        labels = list(re_labels)
         with open(self.data_path + "re_data/labels.txt", "w") as fp:
             fp.write("\n".join(labels))
 

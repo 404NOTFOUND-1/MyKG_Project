@@ -1,12 +1,13 @@
-import os
 import json
-import torch
-import numpy as np
-
+import os
 from collections import namedtuple
-from model import BertNer, BertRe
+
+import numpy as np
+import torch
 from seqeval.metrics.sequence_labeling import get_entities
 from transformers import BertTokenizer
+
+from model import BertNer, BertRe
 
 
 def get_args(args_path, args_name=None):
@@ -65,7 +66,7 @@ class Predictor:
         token_type_ids = torch.tensor(np.array([token_type_ids]))
         attention_mask = torch.tensor(np.array([attention_mask]))
         return input_ids, attention_mask, token_type_ids
-    
+
     def re_predict_common(self, hs, ts):
         res = []
         tmp = []
@@ -74,7 +75,7 @@ class Predictor:
         next_h = None
         for i, h in enumerate(hs):
             if i + 1 < len(hs):
-                next_h = hs[i+1]
+                next_h = hs[i + 1]
             for t in ts:
                 h_start = h[1]
                 h_end = h[2]
@@ -82,7 +83,7 @@ class Predictor:
                 t_end = t[2]
                 # =============================================
                 # 定义不同数据的后处理规则
-                if self.data_name == "dgre":        
+                if self.data_name == "dgre":
                     # 该数据原因不会出现在设备前面
                     if t_end < h_start:
                         continue
@@ -111,23 +112,23 @@ class Predictor:
                 logits = logits.detach().cpu().numpy()
                 logits = np.argmax(logits, -1)
                 score = score[0][logits[0]]
-                rel =  self.re_id2label[logits[0]]
+                rel = self.re_id2label[logits[0]]
                 if rel != "没关系" and (h[0], t[0], rel) not in res:
                     res.append((h[0], t[0], rel))
         return res
-    
+
     def re_predict_dgre(self, text, ner_result):
         try:
-            hs = ner_result["故障设备"]
-            ts = ner_result["故障原因"]
+            hs = ner_result["PAR"]
+            ts = ner_result["PAR"]
             res = self.re_predict_common(hs, ts)
         except Exception as e:
             res = []
         return res
-        
+
     def re_predict_duie(self, text, ner_result):
         result = []
-        for k,v in self.rels.items():
+        for k, v in self.rels.items():
             ent = k.split("_")
             ent1 = ent[0]
             ent2 = ent[1]
@@ -137,7 +138,7 @@ class Predictor:
                 res = self.re_predict_common(hs, ts)
                 result.extend(res)
         return res
-    
+
     def re_predict(self, text, ner_result):
         res = []
         if self.data_name == "dgre":
@@ -177,7 +178,8 @@ if __name__ == "__main__":
             "根据单体电池封装形式不同，可以分为圆柱电芯、方形电芯及软包电芯。",
             "电池单体模块将一定数量的单体电池连接在一起。",
             "电池单体模块放在一个框架中组成电池包的组件。",
-            "电池单体模块的组成包括单体电池、母线牌、隔层、散热铜管、隔离板、BMU采集板、熔丝、温度传感器、采样电压采集线束。",
+            "盖子打开后，互锁开关断开，三个互锁开关串联与ecu连接，任何一个互锁开关断开时，ecu就会断开主继电器，",
+            "电池管理系统包括了电池管理器、熔断器、手动维修开关（MSD）、接触器、霍尔传感器/分流器、绝缘模块",
         ]
     elif data_name == "duie":
         texts = [
@@ -193,6 +195,4 @@ if __name__ == "__main__":
         print("实体>>>>>：", ner_result)
         re_result = predictor.re_predict(text, ner_result)
         print("关系>>>>>：", re_result)
-        print("="*100)
-    
-    
+        print("=" * 100)
