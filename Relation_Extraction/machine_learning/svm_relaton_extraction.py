@@ -7,19 +7,20 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 
+from data_process import svm_data_process
+
+svm_data_process()
 sentences = []
 relations = []
 entities = []
 new_sentences = []
 new_entities = []
-with open('output.json', 'r', encoding='utf8') as f:
-    i = 0
+with open('svm_output.json', 'r', encoding='utf8') as f:
     for line in f:
         data = json.loads(line)
         sentences.append(data['text'])
         relations.append(data['relations'])
         entities.append(data['entities'])
-        i += 1
 
 sentences, new_sentences, relations, new_relations, entities, new_entities = \
     train_test_split(sentences, relations, entities, test_size=0.4, random_state=412)
@@ -39,7 +40,6 @@ svm_model = make_pipeline(CountVectorizer(), SVC(kernel='linear', probability=Tr
 svm_model.fit(sentences, y)
 
 # 模型评估
-
 new_y_pred = svm_model.predict(new_sentences)
 predicted_relations = label_encoder.inverse_transform(new_y_pred)
 print(classification_report(new_y, new_y_pred, target_names=label_encoder.classes_))

@@ -1,40 +1,54 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torchcrf import CRF
 from sklearn.preprocessing import LabelEncoder
 from torch.utils.data import Dataset, DataLoader
+from torchcrf import CRF
+
+from data_process import bilstm_data_process
 
 # 准备数据
-sentences = [
-    "Marie Curie was born in Warsaw, discovered radium, and died in Passy.",
-    "Albert Einstein was born in Ulm, developed the theory of relativity, and died in Princeton.",
-    "Nikola Tesla was born in Smiljan, invented the Tesla coil, and died in New York.",
-    "Isaac Newton was born in Woolsthorpe, formulated the laws of motion, and died in London.",
-    "Galileo Galilei was born in Pisa, improved the telescope, and died in Arcetri."
-]
-labels = [
-    ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC", "O"],
-    ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC", "O"],
-    ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC", "O"],
-    ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC", "O"],
-    ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC", "O"]
-]
+# sentences = [
+#     "Marie Curie was born in Warsaw, discovered radium, and died in Passy.",
+#     "Albert Einstein was born in Ulm, developed the theory of relativity, and died in Princeton.",
+#     "Nikola Tesla was born in Smiljan, invented the Tesla coil, and died in New York.",
+#     "Isaac Newton was born in Woolsthorpe, formulated the laws of motion, and died in London.",
+#     "Galileo Galilei was born in Pisa, improved the telescope, and died in Arcetri."
+# ]
+# labels = [
+#     ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC",
+#      "O"],
+#     ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC",
+#      "O"],
+#     ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC",
+#      "O"],
+#     ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC",
+#      "O"],
+#     ["B-PER", "I-PER", "O", "O", "O", "B-LOC", "O", "O", "O", "O", "O", "O", "O", "B-MISC", "O", "O", "O", "B-LOC", "O"]
+# ]
+sentences = []
+labels = []
+datas = bilstm_data_process('all.jsonl', 'doccano_conv.json')
+for data in datas:
+    print(data[0], data[1])
+    sentences.append(data[0])
+    labels.append(data[1])
 
 # 标签编码
 label_encoder = LabelEncoder()
-label_encoder.fit(["O", "B-PER", "I-PER", "B-LOC", "I-LOC", "B-MISC", "I-MISC"])
+label_encoder.fit(["O", "B-PAR", "I-PAR", "B-TYPE", "I-TYPE", "B-MAT", "I-MAT"])
 y = [label_encoder.transform(label) for label in labels]
 
 # 词汇表和句子填充
-words = list(set([word for sentence in sentences for word in sentence.split()]))
+words = list(set([word for sentence in sentences for word in sentence]))
 words.append("PAD")
 num_words = len(words)
 word2idx = {w: i for i, w in enumerate(words)}
 max_len = 30
-X = [[word2idx[w] for w in sentence.split()] for sentence in sentences]
+X = [[word2idx[w] for w in sentence] for sentence in sentences]
 X = [x + [word2idx["PAD"]] * (max_len - len(x)) for x in X]
 y = [list(label) + [label_encoder.transform(["O"])[0]] * (max_len - len(label)) for label in y]
+
 
 # 数据集定义
 class RelationDataset(Dataset):
@@ -47,6 +61,7 @@ class RelationDataset(Dataset):
 
     def __getitem__(self, idx):
         return torch.tensor(self.X[idx], dtype=torch.long), torch.tensor(self.y[idx], dtype=torch.long)
+
 
 # 模型定义
 class BiLSTM_CRF(nn.Module):
@@ -68,6 +83,7 @@ class BiLSTM_CRF(nn.Module):
 
     def decode(self, feats, mask):
         return self.crf.decode(feats, mask=mask)
+
 
 # 数据加载
 dataset = RelationDataset(X, y)
