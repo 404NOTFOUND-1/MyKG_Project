@@ -51,3 +51,4 @@ if __name__ == '__main__':
                 zhucong = Relationship(zhu, predicate, cong)
                 my_graph.create(zhucong)
     print('图谱生成完成!')
+

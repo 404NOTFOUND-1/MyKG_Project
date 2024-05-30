@@ -292,7 +292,8 @@ def predict(args, model, tokenizer, prefix=""):
         pbar(step)
     logger.info("\n")
     # plot confusion matrix
-    plot_my_confusionMatrix(y_true, y_pred, classes, 'Bert_CRF Confusion Matrix', 'bert_crf_confusionMatrix.png')
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体为宋体
+    plot_my_confusionMatrix(y_true, y_pred, classes, 'Bert_CRF混淆矩阵', 'bert_crf_confusionMatrix.png')
     # plot report
     plot_classification_report(y_true, y_pred, '{}-crf'.format(args.model_type))
     with open(output_predict_file, "w") as writer:

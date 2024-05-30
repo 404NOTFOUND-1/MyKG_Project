@@ -282,7 +282,7 @@ def predict(args, model, tokenizer, prefix=""):
         pbar(step)
     logger.info("\n")
     # plot confusion matrix
-    plot_my_confusionMatrix(y_true, y_pred, classes, 'Bert_Softmax Confusion Matrix','bert_softmax_confusionMatrix.png')
+    plot_my_confusionMatrix(y_true, y_pred, classes, 'Bert_Softmax混淆矩阵', 'bert_softmax_confusionMatrix.png')
     # plot report
     plot_classification_report(y_true, y_pred, '{}-softmax'.format(args.model_type))
     with open(output_submit_file, "w") as writer:
