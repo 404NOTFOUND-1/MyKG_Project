@@ -67,11 +67,14 @@ def data_process(path):
 def plot_my_confusionMatrix(y_true, y_pred, classes, title, name='myConfusionMatrix.png'):
     font = {'family': 'SimHei', 'size': 17}
     cm = confusion_matrix(y_true, y_pred, labels=classes)
+    # 按照给定的顺序重新索引混淆矩阵和类别标签
+    desired_order_index = [classes.index(cls) for cls in classes]  # 根据classes的当前顺序获取索引
+    ordered_cm = cm[desired_order_index, :][:, desired_order_index]  # 使用索引顺序来排序混淆矩阵
     plt.figure(figsize=(10, 10), dpi=400)
     # 更改字体大小
     sns.set(font_scale=1.3)
     # 使用xticklabels和yticklabels添加刻度标签
-    sns.heatmap(cm, annot=True, cbar=False, cmap=plt.get_cmap('Blues'), xticklabels=classes, yticklabels=classes)
+    sns.heatmap(ordered_cm, annot=True, cbar=False, cmap=plt.get_cmap('Blues'), xticklabels=classes, yticklabels=classes)
     # 设置刻度标签的显示位置和标签文本
     plt.xticks(rotation=45, ha="right")  # 绕x轴旋转45度，向右对齐，有助于标签阅读
     plt.yticks(rotation=45)  # 绕y轴旋转45度

@@ -1,5 +1,6 @@
 from collections import Counter
 
+import pandas as pd
 from sklearn.metrics import classification_report
 
 from plot import *
@@ -46,4 +47,4 @@ class Metrics(object):
     def report_confusion_matrix(self, title, name):
         """计算混淆矩阵"""
         print("\nConfusion Matrix:")
-        plot_my_confusionMatrix(self.golden_tags, self.predict_tags, list(self.tagset), title, name)
+        plot_my_confusionMatrix(self.golden_tags, self.predict_tags, list(self.classes), title, name)
