@@ -125,21 +125,16 @@ def main():
     if not cypher_query:
         print("Invalid query type.")
         return
-
     # 示例连接信息
     uri = "bolt://localhost:7687"  # 替换为你的Neo4j服务器URI
     user = "neo4j"  # 替换为你的Neo4j用户名
     password = "12345678"  # 替换为你的Neo4j密码
-
     # 执行查询并获取结果
     results = fetch_data(uri, user, password, cypher_query)
-
     # 打印节点标签信息
     print_labels(args, results)
-
     # 构建关系图
     G = build_graph(args, results)
-
     # 可视化关系图
     visualize_graph_pyvis(G)
 
